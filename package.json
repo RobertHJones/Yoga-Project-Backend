@@ -1,0 +1,29 @@
+{
+  "name": "yoga-project-backend",
+  "version": "1.0.0",
+  "description": "The backend for my ashtanga yoga series project",
+  "main": "poses.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobertHJones/Yoga-Project-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobertHJones/Yoga-Project-Backend/issues"
+  },
+  "homepage": "https://github.com/RobertHJones/Yoga-Project-Backend#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.7"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15"
+  }
+}
