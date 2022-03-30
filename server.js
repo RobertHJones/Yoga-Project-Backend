@@ -13,4 +13,4 @@ app.use(express.json());
 import posesRouter from "./routes/poses.js";
 app.use("/poses", posesRouter);
 
-app.listen(3000, () => console.log("Server has started"));
+app.listen(5000, () => console.log("Server has started"));
