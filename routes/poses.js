@@ -1,4 +1,5 @@
 import express from "express";
+import res from "express/lib/response";
 import Pose from "../models/poses.js";
 
 const router = express.Router();
@@ -19,9 +20,22 @@ router.get("/:id", getPoseById, (req, res) => {
 });
 
 // Get pose by sanskrit
-router.get("/", getPoseBySan, (req, res) => {
-  res.json({ success: true, payload: res.pose });
+router.get("/", async function (req, res) {
+  const { sanskrit } = req.query;
+  console.log("this is the query", req.params);
+  console.log(sanskrit);
+  if (sanskrit !== undefined)
+    try {
+      const pose = await Pose.find({ sanskrit: sanskrit });
+      res.json({ success: true, payload: pose });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
 });
+
+// router.get("/", getPoseBySan, (req, res) => {
+//   res.json({ success: true, payload: res.pose });
+// });
 
 // Add new pose
 router.post("/", async (req, res) => {
@@ -44,7 +58,29 @@ router.post("/", async (req, res) => {
 router.put("/:id", (req, res) => {});
 
 // Update pose
-router.patch("/:id", (req, res) => {});
+router.patch("/:id", getPoseById, async (req, res) => {
+  if (req.body.sanskrit !== null) {
+    res.pose.sanskrit = req.body.sanskrit;
+  }
+  if (req.body.english !== null) {
+    res.pose.english = req.body.english;
+  }
+  if (req.body.instructions !== null) {
+    res.pose.instructions = req.body.instructions;
+  }
+  if (req.body.series !== null) {
+    res.pose.series = req.body.series;
+  }
+  if (req.body.image !== null) {
+    res.pose.image = req.body.image;
+  }
+  try {
+    const updatedPose = await res.pose.save();
+    res.json({ success: true, payload: updatedPose });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 
 // Delete pose
 router.delete("/:id", getPoseById, async (req, res) => {
@@ -58,6 +94,8 @@ router.delete("/:id", getPoseById, async (req, res) => {
 
 async function getPoseById(req, res, next) {
   let pose;
+  console.log(req.params.id, "is the params");
+  console.log(req.query, "is the query");
   try {
     pose = await Pose.findById(req.params.id);
     if (pose === null) {
@@ -71,19 +109,22 @@ async function getPoseById(req, res, next) {
   next();
 }
 
-async function getPoseBySan(req, res, next) {
-  let pose;
-  try {
-    pose = await Pose.find({ sanskrit: req.query.sanskrit }).exec();
-    if (pose === null) {
-      return res.status(404).json({ message: "Cannot find pose" });
-    }
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-  console.log(pose);
-  res.pose = pose;
-  next();
-}
+// async function getPoseBySan(req, res, next) {
+//   let pose;
+//   console.log(req.query);
+//   const { sanskrit } = req.query;
+//   try {
+//     pose = await Pose.find({ sanskrit: sanskrit });
+//     // pose = await Pose.find(sanskrit);
+//     console.log(sanskrit);
+//     if (pose === null) {
+//       return res.status(404).json({ message: "Cannot find pose" });
+//     }
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message });
+//   }
+//   res.pose = pose;
+//   next();
+// }
 
 export default router;

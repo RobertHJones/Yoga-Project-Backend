@@ -5,7 +5,8 @@
   "main": "poses.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node server.js",
+    "start": "node --experimental-modules --es-module-specifier-resolution=node server.js"
   },
   "repository": {
     "type": "git",
