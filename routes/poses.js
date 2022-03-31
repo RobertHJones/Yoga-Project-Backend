@@ -20,22 +20,9 @@ router.get("/:id", getPoseById, (req, res) => {
 });
 
 // Get pose by sanskrit
-router.get("/", async function (req, res) {
-  const { sanskrit } = req.query;
-  console.log("this is the query", req.params);
-  console.log(sanskrit);
-  if (sanskrit !== undefined)
-    try {
-      const pose = await Pose.find({ sanskrit: sanskrit });
-      res.json({ success: true, payload: pose });
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
+router.get("/sanskrit/:sanskrit", getPoseBySan, (req, res) => {
+  res.json({ success: true, payload: res.pose });
 });
-
-// router.get("/", getPoseBySan, (req, res) => {
-//   res.json({ success: true, payload: res.pose });
-// });
 
 // Add new pose
 router.post("/", async (req, res) => {
@@ -92,6 +79,7 @@ router.delete("/:id", getPoseById, async (req, res) => {
   }
 });
 
+// generic ID search
 async function getPoseById(req, res, next) {
   let pose;
   console.log(req.params.id, "is the params");
@@ -109,22 +97,21 @@ async function getPoseById(req, res, next) {
   next();
 }
 
-// async function getPoseBySan(req, res, next) {
-//   let pose;
-//   console.log(req.query);
-//   const { sanskrit } = req.query;
-//   try {
-//     pose = await Pose.find({ sanskrit: sanskrit });
-//     // pose = await Pose.find(sanskrit);
-//     console.log(sanskrit);
-//     if (pose === null) {
-//       return res.status(404).json({ message: "Cannot find pose" });
-//     }
-//   } catch (err) {
-//     return res.status(500).json({ message: err.message });
-//   }
-//   res.pose = pose;
-//   next();
-// }
+// generic sanskrit search
+async function getPoseBySan(req, res, next) {
+  let pose;
+  const { sanskrit } = req.params;
+  try {
+    pose = await Pose.find({ sanskrit: { $regex: sanskrit, $options: "i" } });
+
+    if (pose === null) {
+      return res.status(404).json({ message: "Cannot find pose" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.pose = pose;
+  next();
+}
 
 export default router;
