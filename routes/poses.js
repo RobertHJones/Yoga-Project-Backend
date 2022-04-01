@@ -24,6 +24,26 @@ router.get("/sanskrit/:sanskrit", getPoseBySan, (req, res) => {
   res.json({ success: true, payload: res.pose });
 });
 
+// Get pose by english
+router.get("/english/:english", getPoseByEng, (req, res) => {
+  res.json({ success: true, payload: res.pose });
+});
+
+// Get pose by series
+router.get("/series/:series", getPoseBySeries, (req, res) => {
+  res.json({ success: true, payload: res.pose });
+});
+
+// Get pose by areas strengthened
+router.get("/strengthens/:strengthens", getPoseByStrength, (req, res) => {
+  res.json({ success: true, payload: res.pose });
+});
+
+// Get pose by areas stretched
+router.get("/stretches/:stretches", getPoseByStretch, (req, res) => {
+  res.json({ success: true, payload: res.pose });
+});
+
 // Add new pose
 router.post("/", async (req, res) => {
   const pose = new Pose({
@@ -32,6 +52,9 @@ router.post("/", async (req, res) => {
     instructions: req.body.instructions,
     series: req.body.series,
     image: req.body.image,
+    position: req.body.position,
+    strengthens: req.body.strengthens,
+    stretches: req.body.stretches,
   });
   try {
     const newPose = await pose.save();
@@ -61,6 +84,16 @@ router.patch("/:id", getPoseById, async (req, res) => {
   if (req.body.image !== null) {
     res.pose.image = req.body.image;
   }
+  if (req.body.position !== null) {
+    res.pose.position = req.body.position;
+  }
+  if (req.body.strengthens !== null) {
+    res.pose.strengthens = req.body.strengthens;
+  }
+  if (req.body.stretches !== null) {
+    res.pose.stretches = req.body.stretches;
+  }
+
   try {
     const updatedPose = await res.pose.save();
     res.json({ success: true, payload: updatedPose });
@@ -103,6 +136,76 @@ async function getPoseBySan(req, res, next) {
   const { sanskrit } = req.params;
   try {
     pose = await Pose.find({ sanskrit: { $regex: sanskrit, $options: "i" } });
+
+    if (pose === null) {
+      return res.status(404).json({ message: "Cannot find pose" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.pose = pose;
+  next();
+}
+// generic english search
+async function getPoseByEng(req, res, next) {
+  let pose;
+  const { english } = req.params;
+  try {
+    pose = await Pose.find({ english: { $regex: english, $options: "i" } });
+
+    if (pose === null) {
+      return res.status(404).json({ message: "Cannot find pose" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.pose = pose;
+  next();
+}
+// search by series
+async function getPoseBySeries(req, res, next) {
+  let pose;
+  const { series } = req.params;
+  try {
+    pose = await Pose.find({ series: series });
+
+    if (pose === null) {
+      return res.status(404).json({ message: "Cannot find pose" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.pose = pose;
+  next();
+}
+
+// search by strengthens
+async function getPoseByStrength(req, res, next) {
+  let pose;
+  const { strengthens } = req.params;
+  try {
+    pose = await Pose.find({
+      strengthens: { $regex: strengthens, $options: "i" },
+    });
+
+    if (pose === null) {
+      return res.status(404).json({ message: "Cannot find pose" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.pose = pose;
+  next();
+}
+
+// search by stretches
+async function getPoseByStretch(req, res, next) {
+  let pose;
+  const { stretches } = req.params;
+  try {
+    pose = await Pose.find({
+      stretches: { $regex: stretches, $options: "i" },
+    });
 
     if (pose === null) {
       return res.status(404).json({ message: "Cannot find pose" });

@@ -6,6 +6,9 @@ const poseSchema = new mongoose.Schema({
   instructions: { type: String, required: true },
   series: { type: String, required: true },
   image: { type: String, required: true },
+  position: { type: Number, required: true },
+  strengthens: { type: String, required: false },
+  stretches: { type: String, required: false },
 });
 
 export default mongoose.model("Pose", poseSchema);
