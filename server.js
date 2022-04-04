@@ -1,9 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
-import { databaseURL } from "./config.js";
+// import { databaseURL } from "./config.js";
 const app = express();
 
 const port = process.env.PORT || 5000;
+
+const databaseURL = process.env.MONGODB_URI;
 
 mongoose.connect(databaseURL);
 const db = mongoose.connection;
