@@ -5,13 +5,9 @@
   "main": "poses.js",
   "type": "module",
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "serve -s build",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "npm run build"
-    },
+    "start": "node -r dotenv/config server.js",
+    "dev": "nodemon -r dotenv/config server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RobertHJones/Yoga-Project-Backend.git"
