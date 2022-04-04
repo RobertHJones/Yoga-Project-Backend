@@ -1,5 +1,5 @@
 import express from "express";
-import res from "express/lib/response";
+// import res from "express/lib/response";
 import Pose from "../models/poses.js";
 
 const router = express.Router();
