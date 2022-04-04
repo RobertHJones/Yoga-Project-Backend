@@ -21,3 +21,5 @@ Conditional rendering of results -
 Array.length === 0 "no results found"
 Array.length === 1 "full information, large image"
 Array.length > 1 "grid display of results"
+
+Show some random results on landing on the page?
