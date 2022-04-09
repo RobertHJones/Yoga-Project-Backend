@@ -16,6 +16,8 @@ Advanced A
 
 Other properties could include, areas it's strengthening, areas it's stretching
 
+Need to add search by position
+
 Conditional rendering of results -
 
 Array.length === 0 "no results found"
