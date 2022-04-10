@@ -44,6 +44,11 @@ router.get("/stretches/:stretches", getPoseByStretch, (req, res) => {
   res.json({ success: true, payload: res.pose });
 });
 
+// Get pose by position
+router.get("/position/:position", getPoseByPosition, (req, res) => {
+  res.json({ success: true, payload: res.pose });
+});
+
 // Add new pose
 router.post("/", async (req, res) => {
   const pose = new Pose({
@@ -206,6 +211,24 @@ async function getPoseByStretch(req, res, next) {
     pose = await Pose.find({
       stretches: { $regex: stretches, $options: "i" },
     });
+
+    if (pose === null) {
+      return res.status(404).json({ message: "Cannot find pose" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  res.pose = pose;
+  next();
+}
+
+// search by position
+async function getPoseByPosition(req, res, next) {
+  let pose;
+  const { position } = req.params;
+
+  try {
+    pose = await Pose.find({ position: position });
 
     if (pose === null) {
       return res.status(404).json({ message: "Cannot find pose" });
