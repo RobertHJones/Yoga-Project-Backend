@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
+// import cors from "cors";
 // import { databaseURL } from "./config.js";
 const app = express();
 
@@ -15,7 +15,7 @@ db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
 // gotta have cors
-app.use(cors());
+// app.use(cors());
 
 import posesRouter from "./routes/poses.js";
 app.use("/poses", posesRouter);
