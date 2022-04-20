@@ -14,6 +14,7 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
+// gotta have cors
 app.use(cors());
 
 import posesRouter from "./routes/poses.js";
