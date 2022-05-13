@@ -8,7 +8,6 @@ On the series search, it needs to display them in the correct order - assign eac
 
 Different series -
 
-Sun Salutations??
 Standing
 Primary
 Intermediate
